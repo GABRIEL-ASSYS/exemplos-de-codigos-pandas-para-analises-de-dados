@@ -23,20 +23,20 @@ Estas instruções permitirão que você obtenha uma cópia do projeto em sua m�
    cd exemplos-de-codigos-pandas-para-analises-de-dados
    ```
 3. (Opcional) **Crie** e **ative** um ambiente virtual:
-  ```
-  python -m venv .venv
-  source .venv/bin/activate    # No Windows: .venv\Scripts\activate
-  ```
+   ```
+   python -m venv .venv
+   source .venv/bin/activate    # No Windows: .venv\Scripts\activate
+   ```
 4. **Instale** as dependências:
-  ```
-  pip install pandas
-  ```
+   ```
+   pip install pandas
+   ```
 5. Execute os notebooks ou scripts de exemplo da forma que preferir:
-  ```
-  jupyter notebook             # se estiver usando Jupyter
-  # ou
-  python exemplo1.py           # para script standalone
-  ```
+   ```
+   jupyter notebook             # se estiver usando Jupyter
+   # ou
+   python exemplo1.py           # para script standalone
+   ```
 ## 🛠️ Construído com <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" width="40" height="40"/> <img src="https://pandas.pydata.org/static/img/pandas_mark.svg" width="40" height="40"/>
 
 * [Python](https://www.python.org/) - Linguagem de programação
