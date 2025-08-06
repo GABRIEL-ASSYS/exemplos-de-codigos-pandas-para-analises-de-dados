@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Python para análise de dados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+            margin-right: 250px;
+        }
+
+        h1 {
+            color: #004879;
+        }
+
+        pre {
+            background: #111;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+
+        .bloco {
+            background-color: #e9f5ff;
+            padding: 20px;
+            border-left: 5px solid #0077b6;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #aaa;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #d6eaf8;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 30px;
+            /* mesmo padding-top do body */
+            right: 30px;
+            /* mesmo padding-right do body */
+            width: 200px;
+            max-height: calc(100vh - 60px);
+            overflow-y: auto;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #sidebar h2 {
+            font-size: 16px;
+            margin-top: 0;
+            color: #004879;
+        }
+
+        #sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #sidebar li {
+            margin: 8px 0;
+        }
+
+        #sidebar a {
+            text-decoration: none;
+            color: #0077b6;
+            font-size: 14px;
+        }
+
+        #sidebar a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav id="sidebar">
+        <h2>Conteúdo</h2>
+        <ul>
+            <li><a href="#remocao-nulos">🧹 Remoção de Valores Nulos</a></li>
+            <li><a href="#remocao-duplicados">🗂️ Remoção de Valores Duplicados</a></li>
+            <li><a href="#conversao-tipos">🔄 Conversão de Tipos de Dados</a></li>
+            <li><a href="#renomear-colunas">✏️ Renomear Colunas e Reordenar</a></li>
+            <li><a href="#limpeza-strings">🧹 Limpeza e Padronização de Strings</a></li>
+            <li><a href="#preenchimento-interpolacao">💧 Preenchimento e Interpolação de Valores Faltantes</a></li>
+            <li><a href="#filtragem-condicional">🔎 Filtragem e Seleção Condicional</a></li>
+            <li><a href="#agrupamento-agregacao">📊 Agrupamento e Agregação</a></li>
+            <li><a href="#pivot-melt">🔄 Pivot e Melt</a></li>
+            <li><a href="#juncao-dataframes">🔗 Junções (merge) de DataFrames</a></li>
+            <li><a href="#ordenacao-amostragem">🔢 Ordenação e Amostragem</a></li>
+            <li><a href="#detecção-outliers">⚠️ Detecção e Tratamento de Outliers</a></li>
+            <li><a href="#criacao-features">🚀 Criação de Novas Colunas e Features</a></li>
+            <li><a href="#codificacao-categoricas">🔢 Codificação de Variáveis Categóricas</a></li>
+            <li><a href="#operacoes-janela">🌊 Operações de Janela (rolling, expanding, ewm)</a></li>
+        </ul>
+    </nav>
+
+    <h1 id="remocao-nulos">🧹 Remoção de Valores Nulos</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar o dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Remover todas as linhas que contenham pelo menos um valor nulo
+df.dropna(inplace=True)
+
+# 3. Salvar o resultado em um novo arquivo
+df.to_csv('dados_sem_nulos.csv', index=False)
+
+# (Opcional) Verificar forma antes e depois
+print("Antes:", pd.read_csv('dados.csv').shape)
+print("Depois:", df.shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Remove linhas com valores ausentes do conjunto de dados, garantindo que análises e modelos posteriores não
+            sejam distorcidos por dados faltantes.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>import pandas as pd</strong>: carrega a biblioteca pandas.</li>
+            <li><strong>df = pd.read_csv('dados.csv')</strong>: lê o CSV original num DataFrame.</li>
+            <li><strong>df.dropna(inplace=True)</strong>: descarta todas as linhas que tenham pelo menos um valor nulo.
+            </li>
+            <li><strong>df.to_csv('dados_sem_nulos.csv', index=False)</strong>: escreve o DataFrame já limpo em um novo
+                arquivo.</li>
+            <li><strong>print(df.shape)</strong>: mostra quantas linhas e colunas restaram após a limpeza.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Etapa</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Original</td>
+                    <td>1.000</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Sem Nulos</td>
+                    <td>935</td>
+                    <td>12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="remocao-duplicados">🗂️ Remoção de Valores Duplicados</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar o dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Remover linhas duplicadas
+df.drop_duplicates(inplace=True)
+
+# 3. Salvar o resultado em um novo arquivo
+df.to_csv('dados_sem_duplicados.csv', index=False)
+
+# (Opcional) Verificar forma antes e depois
+print("Antes:", pd.read_csv('dados.csv').shape)
+print("Depois:", df.shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Elimina registros repetidos, garantindo que cada observação seja única e evitando distorções em análises
+            estatísticas ou modelos de ML.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>import pandas as pd</strong>: carrega a biblioteca pandas.</li>
+            <li><strong>df = pd.read_csv('dados.csv')</strong>: lê o CSV original num DataFrame.</li>
+            <li><strong>df.drop_duplicates(inplace=True)</strong>: descarta todas as linhas que são duplicatas exatas de
+                outras.</li>
+            <li><strong>df.to_csv('dados_sem_duplicados.csv', index=False)</strong>: escreve o DataFrame sem duplicatas
+                em um novo arquivo.</li>
+            <li><strong>print(df.shape)</strong>: mostra quantas linhas e colunas restaram após a remoção.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Etapa</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Original</td>
+                    <td>1.200</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Sem Duplicados</td>
+                    <td>1.050</td>
+                    <td>12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="conversao-tipos">🔄 Conversão de Tipos de Dados</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar o dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Converter colunas
+df['idade'] = df['idade'].astype(int)
+df['preco'] = df['preco'].str.replace(',', '.').astype(float)
+df['data'] = pd.to_datetime(df['data'], dayfirst=True)
+
+# 3. Salvar o resultado em um novo arquivo
+df.to_csv('dados_convertidos.csv', index=False)
+
+# (Opcional) Verificar tipos antes e depois
+print(df.dtypes)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Garante que cada coluna tenha o tipo de dado correto, indispensável para cálculos, comparações e funções de
+            data/hora funcionarem sem erros.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df['idade'].astype(int)</strong>: converte strings ou floats para inteiros (ex: "30" → 30).</li>
+            <li><strong>df['preco'].str.replace(',', '.').astype(float)</strong>: substitui vírgula por ponto e converte
+                para float.</li>
+            <li><strong>pd.to_datetime(..., dayfirst=True)</strong>: converte texto em formato dia/mês/ano para
+                datetime.</li>
+            <li><strong>df.to_csv(...)</strong>: salva o DataFrame com os novos tipos em um arquivo CSV.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Coluna</th>
+                    <th>Tipo Antes</th>
+                    <th>Tipo Depois</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>idade</td>
+                    <td>object</td>
+                    <td>int64</td>
+                </tr>
+                <tr>
+                    <td>preco</td>
+                    <td>object</td>
+                    <td>float64</td>
+                </tr>
+                <tr>
+                    <td>data</td>
+                    <td>object</td>
+                    <td>datetime64[ns]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="renomear-colunas">✏️ Renomear Colunas e Reordenar</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Renomear colunas
+df.rename(columns={
+    'old_name1': 'novo_nome1',
+    'old_name2': 'novo_nome2'
+}, inplace=True)
+
+# 3. Reordenar colunas
+cols = ['novo_nome1', 'coluna3', 'novo_nome2'] \
+    + [c for c in df.columns if c not in ['novo_nome1','coluna3','novo_nome2']]
+df = df[cols]
+
+# 4. Salvar resultado
+df.to_csv('dados_renomeados_reordenados.csv', index=False)
+
+# (Opcional) Verificar colunas após
+print("Colunas após:", df.columns.tolist())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Permite renomear colunas para nomes mais claros e reordenar a disposição das colunas, facilitando análise e
+            visualização dos dados.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df.rename(..., inplace=True)</strong>: mapeia nomes antigos para novos diretamente no DataFrame.
+            </li>
+            <li><strong>cols = [...] + [... for c in ...]</strong>: cria lista com a ordem desejada de colunas, mantendo
+                o restante no final.</li>
+            <li><strong>df = df[cols]</strong>: reordena o DataFrame de acordo com essa lista.</li>
+            <li><strong>df.to_csv(...)</strong>: grava o DataFrame com as modificações em novo arquivo.</li>
+            <li><strong>print(df.columns.tolist())</strong>: exibe a lista de colunas final para confirmação.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ordem</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Original</td>
+                    <td>['old_name1', 'old_name2', 'coluna3', ...]</td>
+                </tr>
+                <tr>
+                    <td>Novo</td>
+                    <td>['novo_nome1', 'coluna3', 'novo_nome2', ...]</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="limpeza-strings">🧹 Limpeza e Padronização de Strings</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+import unidecode
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Limpeza e padronização em todas as colunas de texto
+for col in df.select_dtypes(include='object'):
+    df[col] = df[col].str.strip()                                # remover espaços em branco
+    df[col] = df[col].str.lower()                                # converter para minúsculas
+    df[col] = df[col].apply(lambda x: unidecode.unidecode(x) 
+                             if isinstance(x, str) else x)       # remover acentuação
+    df[col] = df[col].str.replace(r'[^a-z0-9\s]', '', regex=True)  # tirar caracteres especiais
+    df[col] = df[col].str.replace(r'\s+', ' ', regex=True)          # colapsar múltiplos espaços
+
+# 3. Salvar resultado
+df.to_csv('dados_strings_limpos.csv', index=False)
+
+# (Opcional) Verificar alguns registros
+print(df.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Padroniza campos de texto, garantindo consistência na caixa, remoção de acentos e limpeza de símbolos,
+            essencial para agrupamentos e comparações fiéis.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>str.strip()</strong>: elimina espaços no início e no fim.</li>
+            <li><strong>str.lower()</strong>: converte todo o texto para minúsculas.</li>
+            <li><strong>unidecode.unidecode()</strong>: transforma caracteres acentuados em letras simples.</li>
+            <li><strong>str.replace(r'[^a-z0-9\s]', '')</strong>: remove símbolos e pontuação indesejados.</li>
+            <li><strong>str.replace(r'\s+', ' ')</strong>: reduz múltiplos espaços a um único.</li>
+            <li><strong>df.to_csv(...)</strong>: escreve o DataFrame limpo num novo CSV.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Texto Original</th>
+                    <th>Texto Limpo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> João da Silva </td>
+                    <td>joao da silva</td>
+                </tr>
+                <tr>
+                    <td>CAFE &amp; PÃES!!</td>
+                    <td>cafe paes</td>
+                </tr>
+                <tr>
+                    <td>Rua São Jorge</td>
+                    <td>rua sao jorge</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="preenchimento-interpolacao">💧 Preenchimento e Interpolação de Valores Faltantes</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Preenchimento simples
+df['vendas'] = df['vendas'].fillna(df['vendas'].mean())       # preencher com a média
+df['categoria'] = df['categoria'].fillna('desconhecido')       # preencher com valor fixo
+
+# 3. Interpolação (para séries temporais)
+df['receita'] = df['receita'].interpolate(method='linear')    # interpolação linear
+
+# 4. Salvar resultado
+df.to_csv('dados_preenchidos.csv', index=False)
+
+# (Opcional) Ver alguns registros
+print(df.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Substitui valores ausentes por estimativas ou constantes, garantindo continuidade em análises estatísticas e
+            séries temporais.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df['vendas'].fillna(df['vendas'].mean())</strong>: substitui NaN pela média da coluna.</li>
+            <li><strong>df['categoria'].fillna('desconhecido')</strong>: preenche categorias vazias com um rótulo
+                padrão.</li>
+            <li><strong>df['receita'].interpolate(method='linear')</strong>: estima valores faltantes em série temporal
+                usando interpolação linear.</li>
+            <li><strong>df.to_csv(...)</strong>: grava o DataFrame com valores preenchidos num novo CSV.</li>
+            <li><strong>print(df.head())</strong>: exibe as primeiras linhas para conferir o preenchimento.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Original (NaNs)</th>
+                    <th>Preenchido/Interpolado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>vendas: NaN</td>
+                    <td>vendas: 245.3</td>
+                </tr>
+                <tr>
+                    <td>categoria: NaN</td>
+                    <td>categoria: desconhecido</td>
+                </tr>
+                <tr>
+                    <td>receita: NaN (entre 1200 e 1400)</td>
+                    <td>receita: 1300.0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="filtragem-condicional">🔎 Filtragem e Seleção Condicional</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Filtrar linhas com condição única (idade >= 18)
+df_maiores_18 = df[df['idade'] >= 18]
+
+# 3. Filtrar múltiplas condições (idade >= 18 e renda > 5000)
+df_vip = df[(df['idade'] >= 18) & (df['renda'] > 5000)]
+
+# 4. Selecionar colunas específicas após filtrar categoria
+df_eletronicos = df.loc[df['categoria'] == 'eletronicos', ['id', 'produto', 'preco']]
+
+# 5. Salvar resultados
+df_maiores_18.to_csv('dados_maiores_18.csv', index=False)
+df_vip.to_csv('dados_vip.csv', index=False)
+df_eletronicos.to_csv('dados_eletronicos.csv', index=False)
+
+# (Opcional) Verificar formas após cada filtro
+print("Maiores 18:", df_maiores_18.shape)
+print("VIP:", df_vip.shape)
+print("Eletrônicos:", df_eletronicos.shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Permite extrair subconjuntos de dados conforme regras lógicas, focando apenas nas observações relevantes para
+            cada análise.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df[df['idade'] >= 18]</strong>: retorna apenas linhas em que a coluna <code>idade</code> é maior
+                ou igual a 18.</li>
+            <li><strong>df[(cond1) &amp; (cond2)]</strong>: aplica duas condições ao mesmo tempo (idade e renda).</li>
+            <li><strong>df.loc[linha_cond, [colunas]]</strong>: filtra linhas e, em seguida, seleciona colunas
+                específicas.</li>
+            <li><strong>to_csv(...)</strong>: escreve cada subconjunto em um arquivo CSV separado.</li>
+            <li><strong>print(shape)</strong>: mostra quantas linhas e colunas ficaram após cada filtro.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Filtro</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Maiores 18</td>
+                    <td>850</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>VIP</td>
+                    <td>120</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Eletrônicos</td>
+                    <td>200</td>
+                    <td>3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="agrupamento-agregacao">📊 Agrupamento e Agregação</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Agrupar por categoria e calcular métricas
+df_grouped = df.groupby('categoria').agg(
+    total_vendas=('vendas', 'sum'),
+    media_preco=('preco', 'mean'),
+    data_max=('data', 'max'),
+    data_min=('data', 'min'),
+    qtd_registros=('id', 'count')
+).reset_index()
+
+# 3. Salvar resultado
+df_grouped.to_csv('dados_agrupados.csv', index=False)
+
+# (Opcional) Ver resultado
+print(df_grouped.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Resume dados por grupos (ex: categorias), permitindo obter somas, médias, datas e contagens para análise
+            comparativa.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df.groupby('categoria')</strong>: agrupa o DataFrame pela coluna <code>categoria</code>.</li>
+            <li><strong>.agg(...)</strong>: aplica múltiplas funções de agregação com nomes customizados.</li>
+            <li><strong>total_vendas=('vendas','sum')</strong>: soma os valores de <code>vendas</code> em cada grupo.
+            </li>
+            <li><strong>media_preco=('preco','mean')</strong>: calcula a média de <code>preco</code> por grupo.</li>
+            <li><strong>data_max=('data','max')</strong>: encontra a data mais recente em cada grupo.</li>
+            <li><strong>data_min=('data','min')</strong>: encontra a data mais antiga em cada grupo.</li>
+            <li><strong>qtd_registros=('id','count')</strong>: conta quantos registros há em cada grupo.</li>
+            <li><strong>.reset_index()</strong>: transforma o índice de volta em coluna no DataFrame resultante.</li>
+            <li><strong>df_grouped.to_csv(...)</strong>: salva o DataFrame agregado em um novo CSV.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>categoria</th>
+                    <th>total_vendas</th>
+                    <th>media_preco</th>
+                    <th>data_max</th>
+                    <th>data_min</th>
+                    <th>qtd_registros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>bebidas</td>
+                    <td>15000</td>
+                    <td>5.25</td>
+                    <td>2025-06-30</td>
+                    <td>2025-01-01</td>
+                    <td>300</td>
+                </tr>
+                <tr>
+                    <td>laticinios</td>
+                    <td>23000</td>
+                    <td>7.80</td>
+                    <td>2025-06-30</td>
+                    <td>2025-01-01</td>
+                    <td>420</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="pivot-melt">🔄 Pivot e Melt</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('vendas_mensais.csv')  
+# df contém colunas: 'ano', 'mes', 'categoria', 'vendas'
+
+# 2. Pivot: transformar categorias em colunas
+df_pivot = df.pivot_table(
+    index=['ano', 'mes'],
+    columns='categoria',
+    values='vendas',
+    aggfunc='sum'
+).reset_index()
+
+# 3. Melt: voltar de formato wide para long
+df_long = df_pivot.melt(
+    id_vars=['ano', 'mes'],
+    var_name='categoria',
+    value_name='vendas'
+)
+
+# 4. Salvar resultados
+df_pivot.to_csv('vendas_pivot.csv', index=False)
+df_long.to_csv('vendas_melt.csv', index=False)
+
+# (Opcional) Mostrar primeiras linhas
+print(df_pivot.head())
+print(df_long.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p><strong>Pivot:</strong> reorganiza dados longos para formato wide, útil para comparações por coluna.
+            <strong>Melt:</strong> reverte wide para long, ideal para análises que exigem estrutura “tidy”.
+        </p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df.pivot_table(...)</strong>: agrupa vendas por ano e mês e cria colunas separadas para cada
+                categoria.</li>
+            <li><strong>index=['ano','mes']</strong>: mantém essas colunas como índice no resultado wide.</li>
+            <li><strong>columns='categoria'</strong>: cada valor único vira uma coluna.</li>
+            <li><strong>values='vendas'</strong>: valores a serem agregados.</li>
+            <li><strong>df_pivot.melt(...)</strong>: derrete o wide de volta para long, unindo as colunas de categoria
+                em duas colunas: <code>categoria</code> e <code>vendas</code>.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <p><em>DataFrame Pivot</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ano</th>
+                    <th>mes</th>
+                    <th>bebidas</th>
+                    <th>laticinios</th>
+                    <th>alimentos</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025</td>
+                    <td>1</td>
+                    <td>5000</td>
+                    <td>7000</td>
+                    <td>4500</td>
+                </tr>
+                <tr>
+                    <td>2025</td>
+                    <td>2</td>
+                    <td>5200</td>
+                    <td>7300</td>
+                    <td>4600</td>
+                </tr>
+            </tbody>
+        </table>
+        <p><em>DataFrame Melt</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ano</th>
+                    <th>mes</th>
+                    <th>categoria</th>
+                    <th>vendas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025</td>
+                    <td>1</td>
+                    <td>bebidas</td>
+                    <td>5000</td>
+                </tr>
+                <tr>
+                    <td>2025</td>
+                    <td>1</td>
+                    <td>laticinios</td>
+                    <td>7000</td>
+                </tr>
+                <tr>
+                    <td>2025</td>
+                    <td>1</td>
+                    <td>alimentos</td>
+                    <td>4500</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="juncao-dataframes">🔗 Junções (merge) de DataFrames</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar datasets
+df_clientes = pd.read_csv('clientes.csv')  # colunas: cliente_id, nome
+df_vendas   = pd.read_csv('vendas.csv')    # colunas: venda_id, cliente_id, valor
+
+# 2. Inner Join (só clientes com vendas)
+df_inner = pd.merge(df_clientes, df_vendas, on='cliente_id', how='inner')
+
+# 3. Left Join (todos clientes, mesmo sem vendas)
+df_left  = pd.merge(df_clientes, df_vendas, on='cliente_id', how='left')
+
+# 4. Outer Join (todos registros de ambos os DataFrames)
+df_outer = pd.merge(df_clientes, df_vendas, on='cliente_id', how='outer')
+
+# 5. Salvar resultados
+df_inner.to_csv('inner.csv', index=False)
+df_left.to_csv('left.csv', index=False)
+df_outer.to_csv('outer.csv', index=False)
+
+# (Opcional) Verificar formas
+print("Inner:", df_inner.shape)
+print("Left: ", df_left.shape)
+print("Outer:", df_outer.shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Combina dados de dois DataFrames com base em uma chave comum, reunindo informações complementares em um único
+            conjunto.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>pd.merge(..., how='inner')</strong>: traz apenas as linhas com chave presente em ambos os
+                DataFrames.</li>
+            <li><strong>how='left'</strong>: mantém todas as linhas do primeiro DataFrame, preenchendo com
+                <code>NaN</code> onde não houver correspondência.
+            </li>
+            <li><strong>how='outer'</strong>: inclui todas as linhas de ambos os DataFrames, com <code>NaN</code> onde
+                faltar dados.</li>
+            <li><strong>on='cliente_id'</strong>: especifica a coluna usada como chave de junção.</li>
+            <li><strong>to_csv(...)</strong>: salva cada resultado de junção em arquivos CSV distintos.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo de Join</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Inner</td>
+                    <td>2</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Left</td>
+                    <td>3</td>
+                    <td>4</td>
+                </tr>
+                <tr>
+                    <td>Outer</td>
+                    <td>4</td>
+                    <td>4</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="ordenacao-amostragem">🔢 Ordenação e Amostragem</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Ordenar por coluna (ascendente)
+df_sorted = df.sort_values(by='idade')
+
+# 3. Ordenar por múltiplas colunas (idade desc, renda asc)
+df_sorted_multi = df.sort_values(by=['idade','renda'], ascending=[False, True])
+
+# 4. Amostragem aleatória de 10% dos registros
+df_sample = df.sample(frac=0.1, random_state=42)
+
+# 5. Salvar resultados
+df_sorted.to_csv('dados_ordenados.csv', index=False)
+df_sorted_multi.to_csv('dados_ordenados_multi.csv', index=False)
+df_sample.to_csv('dados_amostra.csv', index=False)
+
+# (Opcional) Verificar formas
+print("Ordenado:", df_sorted.shape)
+print("Multi:", df_sorted_multi.shape)
+print("Amostra:", df_sample.shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Permite organizar os dados em ordem específica e extrair subconjuntos representativos para análises
+            exploratórias ou validação de modelos.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df.sort_values(by='idade')</strong>: ordena o DataFrame pela coluna <code>idade</code> em ordem
+                crescente.</li>
+            <li><strong>ascending=[False, True]</strong>: no sort múltiplo, define ordem decrescente para
+                <code>idade</code> e crescente para <code>renda</code>.
+            </li>
+            <li><strong>df.sample(frac=0.1, random_state=42)</strong>: seleciona aleatoriamente 10% das linhas,
+                garantindo reprodutibilidade com <code>random_state</code>.</li>
+            <li><strong>to_csv(...)</strong>: salva cada DataFrame resultante em arquivos separados.</li>
+            <li><strong>print(df.shape)</strong>: mostra as dimensões após cada operação.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Operação</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ordenado</td>
+                    <td>1.000</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Multi</td>
+                    <td>1.000</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Amostra</td>
+                    <td>100</td>
+                    <td>12</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="detecção-outliers">⚠️ Detecção e Tratamento de Outliers</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Detectar outliers usando IQR na coluna 'vendas'
+Q1 = df['vendas'].quantile(0.25)
+Q3 = df['vendas'].quantile(0.75)
+IQR = Q3 - Q1
+limite_inferior = Q1 - 1.5 * IQR
+limite_superior = Q3 + 1.5 * IQR
+
+# 3. Remover outliers
+df_sem_outliers = df[(df['vendas'] >= limite_inferior) & (df['vendas'] <= limite_superior)]
+
+# 4. Alternativa: cap (limitar) valores extremos
+df['vendas_capped'] = df['vendas'].clip(lower=limite_inferior, upper=limite_superior)
+
+# 5. Salvar resultados
+df_sem_outliers.to_csv('dados_sem_outliers.csv', index=False)
+df.to_csv('dados_com_cap.csv', index=False)
+
+# (Opcional) Verificar formas antes e depois
+print("Original:", df.shape)
+print("Sem Outliers:", df_sem_outliers.shape)
+print("Com Cap:", df[['vendas_capped']].shape)
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Identifica e elimina ou limita valores extremos que podem distorcer estatísticas, gráficos e modelos de
+            Machine Learning.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>quantile(0.25/0.75)</strong>: obtém Q1 e Q3 para calcular o IQR (distância interquartil).</li>
+            <li><strong>limite_inferior/superior</strong>: definem faixa aceitável de valores (<em>Q1 – 1.5·IQR</em> a
+                <em>Q3 + 1.5·IQR</em>).
+            </li>
+            <li><strong>df[(...)]</strong>: filtra linhas dentro dos limites, removendo outliers.</li>
+            <li><strong>clip(...)</strong>: substitui valores fora dos limites pelos limites, mantendo todas as linhas.
+            </li>
+            <li><strong>to_csv(...)</strong>: salva DataFrames resultantes em novos arquivos CSV.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Operação</th>
+                    <th>Linhas</th>
+                    <th>Colunas</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Original</td>
+                    <td>1.000</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Sem Outliers</td>
+                    <td>950</td>
+                    <td>12</td>
+                </tr>
+                <tr>
+                    <td>Com Cap</td>
+                    <td>1.000</td>
+                    <td>13</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="criacao-features">🚀 Criação de Novas Colunas e Features</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Criar coluna de lucro
+df['lucro'] = df['vendas'] - df['custo']
+
+# 3. Criar coluna categórica baseada em quantidade
+df['tamanho_pedido'] = df['quantidade'].apply(
+    lambda x: 'pequeno' if x < 10 else 'grande'
+)
+
+# 4. Extrair informações de data
+df['data'] = pd.to_datetime(df['data'], dayfirst=True)
+df['ano'] = df['data'].dt.year
+df['mes'] = df['data'].dt.month
+df['dia_semana'] = df['data'].dt.day_name()
+
+# 5. Criar média móvel de 7 dias das vendas
+df['vendas_ma_7d'] = df['vendas'].rolling(window=7).mean()
+
+# 6. Salvar resultado
+df.to_csv('dados_com_features.csv', index=False)
+
+# (Opcional) Ver primeiras linhas
+print(df.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Enriquece o dataset com informações derivadas, facilitando análises mais profundas e alimentando modelos de
+            Machine Learning com variáveis relevantes.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>df['lucro']</strong>: diferença entre <code>vendas</code> e <code>custo</code> para medir
+                rentabilidade.</li>
+            <li><strong>apply(lambda)</strong>: cria uma coluna categórica <code>tamanho_pedido</code> com base na
+                quantidade.</li>
+            <li><strong>pd.to_datetime</strong> + <code>.dt</code>: extrai <code>ano</code>, <code>mes</code> e
+                <code>dia_semana</code> da coluna de data.
+            </li>
+            <li><strong>.rolling(window=7).mean()</strong>: calcula média móvel de 7 dias para suavizar flutuações
+                diárias.</li>
+            <li><strong>df.to_csv(...)</strong>: salva o DataFrame enriquecido com novas features em um novo arquivo.
+            </li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>data</th>
+                    <th>vendas</th>
+                    <th>custo</th>
+                    <th>lucro</th>
+                    <th>tamanho_pedido</th>
+                    <th>ano</th>
+                    <th>mes</th>
+                    <th>dia_semana</th>
+                    <th>vendas_ma_7d</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-07-25</td>
+                    <td>120</td>
+                    <td>80</td>
+                    <td>40</td>
+                    <td>grande</td>
+                    <td>2025</td>
+                    <td>7</td>
+                    <td>Friday</td>
+                    <td>115.7</td>
+                </tr>
+                <tr>
+                    <td>2025-07-26</td>
+                    <td>95</td>
+                    <td>60</td>
+                    <td>35</td>
+                    <td>grande</td>
+                    <td>2025</td>
+                    <td>7</td>
+                    <td>Saturday</td>
+                    <td>118.3</td>
+                </tr>
+                <tr>
+                    <td>2025-07-27</td>
+                    <td>50</td>
+                    <td>30</td>
+                    <td>20</td>
+                    <td>pequeno</td>
+                    <td>2025</td>
+                    <td>7</td>
+                    <td>Sunday</td>
+                    <td>112.1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="codificacao-categoricas">🔢 Codificação de Variáveis Categóricas</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+
+# 1. Carregar dataset
+df = pd.read_csv('dados.csv')
+
+# 2. Label Encoding (coluna única)
+le = LabelEncoder()
+df['genero_encoded'] = le.fit_transform(df['genero'])
+
+# 3. One-Hot Encoding (múltiplas colunas)
+df_onehot = pd.get_dummies(df, columns=['categoria'], prefix=['cat'])
+
+# 4. Salvar resultados
+df.to_csv('dados_label_encoded.csv', index=False)
+df_onehot.to_csv('dados_onehot.csv', index=False)
+
+# (Opcional) Verificar primeiras linhas
+print(df[['genero','genero_encoded']].head())
+print(df_onehot.head())
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Transforma colunas de texto em formato numérico, essencial para a maioria dos algoritmos de machine learning
+            e para evitar erros em funções matemáticas.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>LabelEncoder</strong>: mapeia cada categoria para um inteiro (ex: "Feminino" → 0, "Masculino" →
+                1).</li>
+            <li><strong>pd.get_dummies(...)</strong>: gera colunas binárias (0/1) para cada valor único na(s) coluna(s)
+                especificada(s).</li>
+            <li><strong>prefix=['cat']</strong>: adiciona um prefixo nas novas colunas, facilitando identificação.</li>
+            <li><strong>to_csv(...)</strong>: grava os DataFrames resultantes em arquivos CSV separados.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <p><em>Label Encoding</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>genero</th>
+                    <th>genero_encoded</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Feminino</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>Masculino</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p><em>One-Hot Encoding</em></p>
+        <table>
+            <thead>
+                <tr>
+                    <th>categoria</th>
+                    <th>cat_eletronicos</th>
+                    <th>cat_moveis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>eletronicos</td>
+                    <td>1</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>moveis</td>
+                    <td>0</td>
+                    <td>1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h1 id="operacoes-janela">🌊 Operações de Janela (rolling, expanding, ewm)</h1>
+
+    <h2>🐍 Exemplo Python</h2>
+    <pre><code>import pandas as pd
+
+# 1. Carregar dataset com séries temporais
+df = pd.read_csv('dados_tempo.csv', parse_dates=['data'], dayfirst=True)
+df.set_index('data', inplace=True)
+
+# 2. Rolling window: média móvel de 7 dias
+df['media_movel_7d'] = df['valor'].rolling(window=7).mean()
+
+# 3. Expanding window: soma cumulativa desde o primeiro ponto
+df['soma_cumulativa'] = df['valor'].expanding(min_periods=1).sum()
+
+# 4. Exponential weighted: média móvel exponencial com span de 7
+df['ewm_7d'] = df['valor'].ewm(span=7, adjust=False).mean()
+
+# 5. Salvar resultado
+df.to_csv('dados_janela.csv')
+print(df.head(15))
+</code></pre>
+
+    <div class="bloco">
+        <h3>🧠 Para que serve?</h3>
+        <p>Permite suavizar, acumular ou aplicar pesos decrescentes em séries temporais, essencial para análise de
+            tendências, sazonalidade e comportamento ao longo do tempo.</p>
+    </div>
+
+    <div class="bloco">
+        <h3>🔍 Explicação passo a passo</h3>
+        <ul>
+            <li><strong>.rolling(window=7).mean()</strong>: calcula a média móvel simples dos últimos 7 períodos.</li>
+            <li><strong>.expanding(min_periods=1).sum()</strong>: acumula a soma de todos os valores desde o início até
+                cada ponto.</li>
+            <li><strong>.ewm(span=7, adjust=False).mean()</strong>: aplica média móvel exponencial, dando mais peso aos
+                valores recentes (span controla a suavização).</li>
+            <li><strong>df.set_index('data')</strong>: define a coluna de data como índice, necessário para operações
+                baseadas em tempo.</li>
+            <li><strong>to_csv(...)</strong>: salva o DataFrame com as novas colunas de janela em um CSV.</li>
+        </ul>
+    </div>
+
+    <div class="bloco">
+        <h3>🧾 Exemplo de Saída</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>data</th>
+                    <th>valor</th>
+                    <th>media_movel_7d</th>
+                    <th>soma_cumulativa</th>
+                    <th>ewm_7d</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2025-07-01</td>
+                    <td>100</td>
+                    <td>NaN</td>
+                    <td>100</td>
+                    <td>100.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-02</td>
+                    <td>110</td>
+                    <td>NaN</td>
+                    <td>210</td>
+                    <td>105.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-03</td>
+                    <td>120</td>
+                    <td>NaN</td>
+                    <td>330</td>
+                    <td>110.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-04</td>
+                    <td>90</td>
+                    <td>NaN</td>
+                    <td>420</td>
+                    <td>105.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-05</td>
+                    <td>130</td>
+                    <td>NaN</td>
+                    <td>550</td>
+                    <td>112.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-06</td>
+                    <td>140</td>
+                    <td>NaN</td>
+                    <td>690</td>
+                    <td>118.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-07</td>
+                    <td>150</td>
+                    <td>120.0</td>
+                    <td>840</td>
+                    <td>124.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-08</td>
+                    <td>160</td>
+                    <td>128.6</td>
+                    <td>1000</td>
+                    <td>129.2</td>
+                </tr>
+                <tr>
+                    <td>2025-07-09</td>
+                    <td>170</td>
+                    <td>137.1</td>
+                    <td>1170</td>
+                    <td>135.1</td>
+                </tr>
+                <tr>
+                    <td>2025-07-10</td>
+                    <td>180</td>
+                    <td>145.7</td>
+                    <td>1350</td>
+                    <td>141.0</td>
+                </tr>
+                <tr>
+                    <td>2025-07-11</td>
+                    <td>190</td>
+                    <td>154.3</td>
+                    <td>1540</td>
+                    <td>146.8</td>
+                </tr>
+                <tr>
+                    <td>2025-07-12</td>
+                    <td>200</td>
+                    <td>163.0</td>
+                    <td>1740</td>
+                    <td>152.5</td>
+                </tr>
+                <tr>
+                    <td>2025-07-13</td>
+                    <td>210</td>
+                    <td>171.4</td>
+                    <td>1950</td>
+                    <td>158.3</td>
+                </tr>
+                <tr>
+                    <td>2025-07-14</td>
+                    <td>220</td>
+                    <td>180.0</td>
+                    <td>2170</td>
+                    <td>164.2</td>
+                </tr>
+                <tr>
+                    <td>2025-07-15</td>
+                    <td>230</td>
+                    <td>188.6</td>
+                    <td>2400</td>
+                    <td>170.1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
